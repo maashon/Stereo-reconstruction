@@ -18,10 +18,11 @@ int main(int argc, char** argv) {
     const double baseline = 160;//213;
 
     // stereo estimation parameters
-    const int dmin =  atoi(argv[3]);
-    const int window_size = atoi(argv[4]);
+    const int dmin =  atoi(argv[4]);
+    const int window_size = atoi(argv[5]);
     const double weight = 500;
     const double scale = 3;
+    const int DPcoefficient = atoi(argv[6]);
 
     ///////////////////////////
     // Commandline arguments //
@@ -35,7 +36,8 @@ int main(int argc, char** argv) {
     cv::Mat image1 = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
     cv::Mat image2 = cv::imread(argv[2], cv::IMREAD_GRAYSCALE);
     cv::Mat coloredImage = cv::imread(argv[1], cv::IMREAD_COLOR);
-
+    cv::Mat groundTruth = cv::imread(argv[3], cv::IMREAD_GRAYSCALE);
+    groundTruth.convertTo(groundTruth, CV_8UC1);
 
     const std::string output_file = "output-";
 
@@ -56,13 +58,14 @@ int main(int argc, char** argv) {
     std::cout << "occlusion weights = " << weight << std::endl;
     std::cout << "disparity added due to image cropping = " << dmin << std::endl;
     std::cout << "scaling of disparity images to show = " << scale << std::endl;
+    std::cout << "DP cost coefficient= " << DPcoefficient << std::endl;
     std::cout << "output filename = " << argv[3] << std::endl;
     std::cout << "-------------------------------------------------" << std::endl;
 
     int height = image1.size().height;
     int width = image1.size().width;
 
-
+   
 
     //naive Sterio reconstruction
    cv::Mat naive_disparities = cv::Mat::zeros(height, width, CV_8UC1);
@@ -74,6 +77,8 @@ int main(int argc, char** argv) {
    std::stringstream out1;
    out1 << output_file << "naive-disparity.png";
    cv::imwrite(out1.str(), naive_disparities);
+   cout <<"Naive SSD dissimilarity : "<<diparityDissimilaritySSD(naive_disparities,groundTruth) << endl;
+
 
   
 
@@ -81,15 +86,16 @@ int main(int argc, char** argv) {
    //estimating the disparity map using the Dynamic programmuing approach
    cv::Mat dp_disparities = cv::Mat::zeros(height, width, CV_8UC1);
    //disparity map
-   StereoEstimation_Dynamic(window_size, height, width, 50000, image1, image2, dp_disparities, 10.0);
+   StereoEstimation_Dynamic(window_size, height, width, DPcoefficient, image1, image2, dp_disparities, 10.0);
    Disparity2PointCloud(coloredImage, "output-dp 3D File", 0, 0, dp_disparities, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.1);
    //writing the png file of the disparity map
    std::stringstream out2;
    out2 << output_file << "dp-disparity.png";
    cv::imwrite(out2.str(), dp_disparities);
+   cout << "DP SSD dissimilarity : " << diparityDissimilaritySSD(dp_disparities, groundTruth) << endl;
 
 
-  
+  //comparing the results of our program with Opencv built in functoins
 
    /*Ptr<StereoBM> sbm = StereoBM::create(48, 15);
    sbm->compute(image1, image2, naive_disparities);*/
@@ -362,23 +368,3 @@ double diparityDissimilaritySSD(
 }
 
 
-double diparityDissimilaritySAD(
-    cv::Mat& calculatedDisparity,
-    cv::Mat& groundTruth
-) {
-
-    int h = calculatedDisparity.size().height;
-    int w = calculatedDisparity.size().width;
-    double sad = 0;
-    int diff;
-    for (int i = 0; i < h; i++) {
-        for (int j = 0; j < w; j++) {
-            sad += abs(calculatedDisparity.at<uchar>(i, j) - groundTruth.at<uchar>(i, j));
-             
-        }
-    }
-
-    return sad;
-
-
-}

@@ -49,6 +49,4 @@ void Disparity2PointCloud(
     cv::Mat& groundTruth
     ) ;
 	
-	double diparityDissimilaritySAD(
-    cv::Mat& calculatedDisparity,
-    cv::Mat& groundTruth);
+	
