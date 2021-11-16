@@ -96,10 +96,17 @@ int main(int argc, char** argv) {
 
 
   //comparing the results of our program with Opencv built in functoins
+   auto t_begin = std::chrono::high_resolution_clock::now();
    cv::Mat SBM = cv::Mat::zeros(height, width, CV_8UC1);
-   Ptr<StereoBM> sbm = StereoBM::create(48, 15);
+   Ptr<StereoBM> sbm = StereoBM::create(32, 9);
    sbm->compute(image1, image2, SBM);
-   Disparity2PointCloud(coloredImage, "output-dp 3D File", 0, 0, SBM, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.1);
+   auto t_end = std::chrono::high_resolution_clock::now();
+   auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(t_end - t_begin).count();
+   std::cout << "Computatoin of SBM algorithm took " << duration << " seconds\n" << std::endl;
+   std::cout << "Calculating disparities for the SBM ... Done.\r" << std::flush;
+   std::cout << std::endl;
+
+   Disparity2PointCloud(coloredImage, "output-SBM 3D File", 0, 0, SBM, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.1);
    //writing the png file of the disparity map
    std::stringstream out3;
    out3 << output_file << "SBM-disparity.png";
