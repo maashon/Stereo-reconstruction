@@ -96,6 +96,7 @@ int main(int argc, char** argv) {
 
 
   //comparing the results of our program with Opencv built in functoins
+   
    auto t_begin = std::chrono::high_resolution_clock::now();
    cv::Mat SBM = cv::Mat::zeros(height, width, CV_8UC1);
    Ptr<StereoBM> sbm = StereoBM::create(32, 9);
@@ -113,7 +114,16 @@ int main(int argc, char** argv) {
    cv::imwrite(out3.str(), SBM);
    cout << "SBM SSD dissimilarity : " << diparityDissimilaritySSD(SBM, groundTruth) << endl;
    
-    
+
+
+   //creating the pointcloud with the ground truth disparity
+
+
+   Disparity2PointCloud(coloredImage, "output-Ground truth 3D File", 0, 0, groundTruth, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.1);
+   //writing the png file of the disparity map
+
+
+  
     cv::waitKey(0);
 
     return 0;
