@@ -259,13 +259,14 @@ void StereoEstimation_Dynamic(
 {
     auto t_begin = std::chrono::high_resolution_clock::now();
     int half_window_size = window_size / 2;
-
+    cout << "Calculating disparities for the dynamic approach... ";
+#pragma parallel for
     for (int r = half_window_size; r < height - half_window_size; ++r) {
 
-        std::cout
+              /*  std::cout
             << "Calculating disparities for the dynamic approach... "
             << std::ceil(((r - half_window_size + 1) / static_cast<double>(height - window_size + 1)) * 100) << "%\r"
-            << std::flush;
+            << std::flush;*/
 
         cv::Mat C = cv::Mat::zeros(width, width, CV_32F);
         cv::Mat M = cv::Mat::zeros(width, width, CV_8UC1);
