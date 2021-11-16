@@ -7,3 +7,6 @@ The dataset used in the project is the middlebury dataset(2005-2006)
 https://vision.middlebury.edu/stereo/data/
 
 According to the webpage, the focal length for the dataset is 3740 pixels and the baseline is 160 centimeters
+
+the obtained disparity maps from the Naive approach, the DP algorithm and in built opencv SBM algorithm are
+compared using SSD,MSQ and SSIM metrics.Also the runtime of all mentioned algorithms are stored in the excel file.
