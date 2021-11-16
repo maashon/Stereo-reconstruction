@@ -94,7 +94,6 @@ int main(int argc, char** argv) {
    /*Ptr<StereoBM> sbm = StereoBM::create(48, 15);
    sbm->compute(image1, image2, naive_disparities);*/
    
-   // cv::imshow("Naive", naive_disparities);
     
     cv::waitKey(0);
 
@@ -164,14 +163,6 @@ void StereoEstimation_Naive(
                 }
                 mean_right /= window_size * window_size;
 
-                //normalization :center the data.we first compute the mean of left image then the mean for the
-                // //right image then and substract it from the data before computing ssd
-                // another thing is to apply scaling. when one image is brighter than the other one
-                // so computing their difference is not sufficient
-                // normalization can be applied to cross corr 
-                //  cross correlation or negate cross co relation (cc or ncc)
-                // if we want to focus into pixel location we could appy gaussian window
-                // TODO: sum up matching cost (ssd) in a window*computing c(i,j,d)
                 for (int u = -half_window_size; u <= half_window_size; ++u) {
 
 
@@ -247,8 +238,6 @@ std::cout << std::endl;
 }
 
 
-
-
 void StereoEstimation_Dynamic(
     const int& window_size,
     int height,
@@ -259,7 +248,7 @@ void StereoEstimation_Dynamic(
 {
     auto t_begin = std::chrono::high_resolution_clock::now();
     int half_window_size = window_size / 2;
-    cout << "Calculating disparities for the dynamic approach... ";
+    cout << "Calculating disparities for the dynamic approach... \n";
 #pragma parallel for
     for (int r = half_window_size; r < height - half_window_size; ++r) {
 
