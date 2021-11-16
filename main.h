@@ -41,3 +41,14 @@ void Disparity2PointCloud(
     int height, int width, cv::Mat& disparities,
     const int& window_size,
     const int& dmin, const double& baseline, const double& focal_length, float xScale, float yScale, float zScale);
+	
+	
+	
+	double diparityDissimilaritySSD(
+    cv::Mat& calculatedDisparity,
+    cv::Mat& groundTruth
+    ) ;
+	
+	double diparityDissimilaritySAD(
+    cv::Mat& calculatedDisparity,
+    cv::Mat& groundTruth);

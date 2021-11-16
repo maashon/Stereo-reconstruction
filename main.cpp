@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
    out1 << output_file << "naive-disparity.png";
    cv::imwrite(out1.str(), naive_disparities);
 
-
+  
 
 
    //estimating the disparity map using the Dynamic programmuing approach
@@ -339,3 +339,46 @@ int DisparitySpaceImage(
     return ssd;
 }
 
+
+double diparityDissimilaritySSD(
+    cv::Mat& calculatedDisparity,
+    cv::Mat& groundTruth
+    ) {
+
+    int h = calculatedDisparity.size().height;
+    int w = calculatedDisparity.size().width;
+    double ssd = 0;
+    int diff;
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w;j++) {
+            diff = (calculatedDisparity.at<uchar>(i, j) - groundTruth.at<uchar>(i, j));
+                ssd += diff * diff;
+        }
+    }
+    
+    return ssd;
+
+
+}
+
+
+double diparityDissimilaritySAD(
+    cv::Mat& calculatedDisparity,
+    cv::Mat& groundTruth
+) {
+
+    int h = calculatedDisparity.size().height;
+    int w = calculatedDisparity.size().width;
+    double sad = 0;
+    int diff;
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++) {
+            sad += abs(calculatedDisparity.at<uchar>(i, j) - groundTruth.at<uchar>(i, j));
+             
+        }
+    }
+
+    return sad;
+
+
+}
