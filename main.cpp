@@ -230,8 +230,8 @@ for (int i = 0; i < h; i++) {
         if (disparities.at<uchar>(i, j) == 0) continue;
 
         z = nominator / (double(disparities.at<uchar>(i, j)) + dmin) *zScale;
-        x = i;
-        y = j;
+        x = i*xScale;
+        y = j*yScale;
         
         R = channels[2].at<uchar>(i, j);
         G=  channels[1].at<uchar>(i, j);
