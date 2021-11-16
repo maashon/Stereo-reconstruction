@@ -96,9 +96,15 @@ int main(int argc, char** argv) {
 
 
   //comparing the results of our program with Opencv built in functoins
-
-   /*Ptr<StereoBM> sbm = StereoBM::create(48, 15);
-   sbm->compute(image1, image2, naive_disparities);*/
+   cv::Mat SBM = cv::Mat::zeros(height, width, CV_8UC1);
+   Ptr<StereoBM> sbm = StereoBM::create(48, 15);
+   sbm->compute(image1, image2, SBM);
+   Disparity2PointCloud(coloredImage, "output-dp 3D File", 0, 0, SBM, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.1);
+   //writing the png file of the disparity map
+   std::stringstream out3;
+   out3 << output_file << "SBM-disparity.png";
+   cv::imwrite(out3.str(), SBM);
+   cout << "SBM SSD dissimilarity : " << diparityDissimilaritySSD(SBM, groundTruth) << endl;
    
     
     cv::waitKey(0);
