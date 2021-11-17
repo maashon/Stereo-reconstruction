@@ -15,3 +15,6 @@ SSIM
 https://www.pyimagesearch.com/2017/06/19/image-difference-with-opencv-and-python/
 PSNR
 https://www.geeksforgeeks.org/python-peak-signal-to-noise-ratio-psnr/
+
+
+screenshots of the 3d shapes recorded in Meshlab are available in data/Screenshots
