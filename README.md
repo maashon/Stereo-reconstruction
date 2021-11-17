@@ -39,6 +39,7 @@ Naive approach Disparity map
 
 3D results 
 
+![Aloe Ground truth](https://user-images.githubusercontent.com/72257286/142197987-d5a18cc9-cd39-4bb1-bd7f-bfee247ac78e.png)
 ![aloe dp 5000 ](https://user-images.githubusercontent.com/72257286/142197773-8a242579-f010-4572-ada5-09ff3923e4a8.png)
 ![aloe dp 80000 ](https://user-images.githubusercontent.com/72257286/142197783-b9eb9d91-73c5-476a-be4a-88f74431214a.png)
 
