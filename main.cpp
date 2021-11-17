@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     ///////////////////////////
     // Commandline arguments //
     ///////////////////////////
-
+    
     if (argc < 4) {
         std::cerr << "Usage: " << argv[0] << " IMAGE1 IMAGE2 OUTPUT_FILE" << std::endl;
         return 1;
