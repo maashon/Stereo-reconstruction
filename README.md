@@ -10,5 +10,8 @@ According to the webpage, the focal length for the dataset is 3740 pixels and th
 the obtained disparity maps from the Naive approach, the DP algorithm and in built opencv SBM algorithm are
 compared using SSD,MSQ and SSIM metrics.Also the runtime of all mentioned algorithms are stored in the excel file.
 
-PSNR metric calculatoin taken from :
-https://www.ccoderun.ca/programming/doxygen/opencv_3.2.0/tutorial_gpu_basics_similarity.html
+PSNR and SSIM metric calculatoin taken from :
+SSIM
+https://www.pyimagesearch.com/2017/06/19/image-difference-with-opencv-and-python/
+PSNR
+https://www.geeksforgeeks.org/python-peak-signal-to-noise-ratio-psnr/
