@@ -18,18 +18,23 @@ https://www.geeksforgeeks.org/python-peak-signal-to-noise-ratio-psnr/
 
 
 screenshots of the 3d shapes recorded in Meshlab are available in data/Screenshots
+
 Main image 
+
 ![view1](https://user-images.githubusercontent.com/72257286/142197666-8e938429-14f3-4abc-bb27-819bd87f7bfe.png)
 
 Ground truth Disparity map
+
 ![disp1](https://user-images.githubusercontent.com/72257286/142197597-7a58dc91-6f15-44e4-87b6-5cc41c48bccc.png)
 
 
 DP Disparity map
+
 ![output-dp-disparity](https://user-images.githubusercontent.com/72257286/142197692-9ff9785a-78bf-40ca-93e7-fb3a960b7bf5.png)
 
 
 Naive approach Disparity map 
+
 ![output-naive-disparity](https://user-images.githubusercontent.com/72257286/142197734-35c0efdf-da19-4d3a-bfe4-6c69addfd971.png)
 
 3D results 
