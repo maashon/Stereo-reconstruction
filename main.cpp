@@ -7,6 +7,7 @@
 #include <sstream>
 #include "main.h"
 
+
 using namespace std;
 
 using namespace cv;
@@ -64,8 +65,8 @@ int main(int argc, char** argv) {
 
     int height = image1.size().height;
     int width = image1.size().width;
+    const int block_size = (height / width) * 2;
 
-   
 
     //naive Sterio reconstruction
    cv::Mat naive_disparities = cv::Mat::zeros(height, width, CV_8UC1);
@@ -78,7 +79,7 @@ int main(int argc, char** argv) {
    out1 << output_file << "naive-disparity.png";
    cv::imwrite(out1.str(), naive_disparities);
    cout <<"Naive SSD dissimilarity : "<<diparityDissimilaritySSD(naive_disparities,groundTruth) << endl;
-
+   
 
   
 
@@ -93,7 +94,7 @@ int main(int argc, char** argv) {
    out2 << output_file << "dp-disparity.png";
    cv::imwrite(out2.str(), dp_disparities);
    cout << "DP SSD dissimilarity : " << diparityDissimilaritySSD(dp_disparities, groundTruth) << endl;
-
+   
 
   //comparing the results of our program with Opencv built in functoins
    
@@ -113,9 +114,8 @@ int main(int argc, char** argv) {
    out3 << output_file << "SBM-disparity.png";
    cv::imwrite(out3.str(), SBM);
    cout << "SBM SSD dissimilarity : " << diparityDissimilaritySSD(SBM, groundTruth) << endl;
-   
-
-
+   //cout << "PSNR value for SBM approach is : " << getPSNR(groundTruth, SBM) << endl;
+ 
    //creating the pointcloud with the ground truth disparity
 
 
