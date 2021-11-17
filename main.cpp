@@ -3,6 +3,7 @@
 #include <string> 
 #include <vector>
 #include <time.h>
+#include <math.h>
 #include <fstream>
 #include <sstream>
 #include "main.h"
@@ -87,7 +88,7 @@ int main(int argc, char** argv) {
    //estimating the disparity map using the Dynamic programmuing approach
    cv::Mat dp_disparities = cv::Mat::zeros(height, width, CV_8UC1);
    //disparity map
-   StereoEstimation_Dynamic(window_size, height, width, DPcoefficient, image1, image2, dp_disparities, 10.0);
+   Dynamic(window_size, height, width, DPcoefficient, image1, image2, dp_disparities, 10.0);
    Disparity2PointCloud(coloredImage, "output-dp 3D File", 0, 0, dp_disparities, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.1);
    //writing the png file of the disparity map
    std::stringstream out2;
@@ -267,7 +268,7 @@ std::cout << std::endl;
 }
 
 
-void StereoEstimation_Dynamic(
+void Dynamic(
     const int& window_size,
     int height,
     int width,
@@ -281,14 +282,9 @@ void StereoEstimation_Dynamic(
 #pragma parallel for
     for (int r = half_window_size; r < height - half_window_size; ++r) {
 
-              /*  std::cout
-            << "Calculating disparities for the dynamic approach... "
-            << std::ceil(((r - half_window_size + 1) / static_cast<double>(height - window_size + 1)) * 100) << "%\r"
-            << std::flush;*/
-
         cv::Mat C = cv::Mat::zeros(width, width, CV_32F);
         cv::Mat M = cv::Mat::zeros(width, width, CV_8UC1);
-
+        // initial matriz filling
         for (int x = 1; x < width; ++x) {
             C.at<float>(x, 0) = x * weight;
             M.at<uchar>(x, 0) = 3;
@@ -302,21 +298,33 @@ void StereoEstimation_Dynamic(
         for (int x = 1; x < width; ++x) {
             for (int y = 1; y < width; ++y) {
 
-                double d = DisparitySpaceImage(image1, image2, half_window_size, r, x, y);
-                double match_cost = C.at<float>(x - 1, y - 1) + d;
-                double left_occl_cost = C.at<float>(x - 1, y) + static_cast<float>(weight);
-                double right_occl_cost = C.at<float>(x, y - 1) + static_cast<float>(weight);
 
-                if (match_cost < std::min(left_occl_cost, right_occl_cost)) {
-                    C.at<float>(x, y) = match_cost;
+                int d = 0;
+                for (int u = -half_window_size; u <= half_window_size; ++u) {
+                    for (int v = -half_window_size; v <= half_window_size; ++v) {
+                         d += (image1.at<uchar>(r + u, x + v) - image2.at<uchar>(r + u, y + v))* (image1.at<uchar>(r + u, x + v) - image2.at<uchar>(r + u, y + v));
+                     }
+                }   
+   
+
+                double matchCost = C.at<float>(x - 1, y - 1) + d;
+                double leftOcclCost = C.at<float>(x - 1, y) + static_cast<float>(weight);
+                double rightOcclCost = C.at<float>(x, y - 1) + static_cast<float>(weight);
+                double minCost = std::min(std::min(leftOcclCost, rightOcclCost), matchCost);
+                if (matchCost <= minCost) {
+                    //matching
                     M.at<uchar>(x, y) = 1;
+                    C.at<float>(x, y) = matchCost;
+                    
                 }
-                else if (left_occl_cost < std::min(match_cost, right_occl_cost)) {
-                    C.at<float>(x, y) = left_occl_cost;
+                else if (leftOcclCost <= minCost) {
+                    //left occlusion is better
+                    C.at<float>(x, y) = leftOcclCost;
                     M.at<uchar>(x, y) = 2;
                 }
-                else { // (right_occl_cost < std::min(match_cost, left_occl_cost))
-                    C.at<float>(x, y) = right_occl_cost;
+                else {
+                    //right occlusion is better
+                    C.at<float>(x, y) = rightOcclCost;
                     M.at<uchar>(x, y) = 3;
                 }
 
@@ -327,6 +335,7 @@ void StereoEstimation_Dynamic(
         int y = width - 1;
         int c = width;
         int d = 0;
+        //filling part of the algorithm
         while (x != 0 && y != 0) {
             switch (M.at<uchar>(x, y)) {
             case 1:
@@ -353,20 +362,7 @@ void StereoEstimation_Dynamic(
 }
 
 
-int DisparitySpaceImage(
-    cv::Mat& image1, cv::Mat& image2,
-    int half_window_size, int r, int x, int y)
-{
-    int ssd = 0;
-    for (int u = -half_window_size; u <= half_window_size; ++u) {
-        for (int v = -half_window_size; v <= half_window_size; ++v) {
-            int val_left = image1.at<uchar>(r + u, x + v);
-            int val_right = image2.at<uchar>(r + u, y + v);
-            ssd += (val_left - val_right) * (val_left - val_right);
-        }
-    }
-    return ssd;
-}
+
 
 
 double diparityDissimilaritySSD(

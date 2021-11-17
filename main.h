@@ -15,7 +15,7 @@ void Disparity2PointCloud(
 
 */
 
-void StereoEstimation_Dynamic(
+void Dynamic(
     const int& window_size,
     int height,
     int width,
@@ -50,4 +50,4 @@ void Disparity2PointCloud(
     ) ;
 	
 	
-double getPSNR(const cv::Mat& I1, const cv::Mat& I2);
+
