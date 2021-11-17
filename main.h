@@ -23,9 +23,6 @@ void Dynamic(
     cv::Mat& image1, cv::Mat& image2,
     cv::Mat& dynamic_disparities, const double& scale);
 
-int DisparitySpaceImage(
-    cv::Mat& image1, cv::Mat& image2,
-    int half_window_size, int r, int x, int y);
 
 void StereoEstimation_Naive(
     const int& window_size,
