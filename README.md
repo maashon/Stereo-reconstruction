@@ -1,4 +1,5 @@
 # Stereo-reconstruction
+#Parsa Pourzargham Neptun ID: LUM2CE
 
 In this project, the 3d reconstruction of a scene is implemented using Naive Image patch approach, as well as the dynamic programming approach in the performance.xlsx file, the performance of the models over the dataset with different parameters is prwesented
 
