@@ -15,6 +15,7 @@ PSNR and SSIM metric calculatoin taken from :
 SSIM
 
 https://www.pyimagesearch.com/2017/06/19/image-difference-with-opencv-and-python/
+
 PSNR
 
 https://www.geeksforgeeks.org/python-peak-signal-to-noise-ratio-psnr/
