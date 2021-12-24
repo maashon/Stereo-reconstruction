@@ -99,6 +99,27 @@ SBM:
 ![SBM Difference](https://user-images.githubusercontent.com/72257286/147368843-b4201e16-f75a-4d32-8375-d2cfe5995335.png)
 
 
+comparison:
+
+Here is the chart comparing the runtime of the algorithms:
+
+
+![Runtime comparison](https://user-images.githubusercontent.com/72257286/147369571-5b610604-a8b8-4708-9001-ab62ed20042e.png)
+
+expectedly, our algorithms are significantly slower that the built-in opencv algorithms.
+
+Similarity comparison:
+
+![similarity comparison](https://user-images.githubusercontent.com/72257286/147369593-7ed73009-e348-432a-af0d-876aa096edb9.png)
+
+the above chart demonstrates the PSNR and SSIM similarty comparison for the images obtained bythe algorithms.
+
+Overal look:
+
+the following chart shos the minimum,maximum and average runtime for all algorithms.
+
+
+![overall look](https://user-images.githubusercontent.com/72257286/147369653-3e535646-677a-4fa8-980c-005d0f2572ad.png)
 
 
 
