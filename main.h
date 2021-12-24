@@ -45,6 +45,8 @@ void Disparity2PointCloud(
     cv::Mat& calculatedDisparity,
     cv::Mat& groundTruth
     ) ;
+
+    void difference(cv::Mat& image1, cv::Mat& image2, cv::Mat& output);
 	
 	
 

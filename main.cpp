@@ -34,11 +34,14 @@ int main(int argc, char** argv) {
         std::cerr << "Usage: " << argv[0] << " IMAGE1 IMAGE2 OUTPUT_FILE" << std::endl;
         return 1;
     }
-
-    cv::Mat image1 = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
-    cv::Mat image2 = cv::imread(argv[2], cv::IMREAD_GRAYSCALE);
-    cv::Mat coloredImage = cv::imread(argv[1], cv::IMREAD_COLOR);
-    cv::Mat groundTruth = cv::imread(argv[3], cv::IMREAD_GRAYSCALE);
+   std::string PairName = "Wood2";
+   std::string leftNAme = "..\\data\\"+PairName+"\\view1.png";
+   std::string rightName = "..\\data\\" + PairName + "\\view5.png";
+   std::string gtName = "..\\data\\" + PairName + "\\disp1.png";
+    cv::Mat image1 = cv::imread(leftNAme, cv::IMREAD_GRAYSCALE);
+    cv::Mat image2 = cv::imread(rightName, cv::IMREAD_GRAYSCALE);
+    cv::Mat coloredImage = cv::imread(leftNAme, cv::IMREAD_COLOR);
+    cv::Mat groundTruth = cv::imread(gtName, cv::IMREAD_GRAYSCALE);
     groundTruth.convertTo(groundTruth, CV_8UC1);
 
     const std::string output_file = "output-";
@@ -67,18 +70,22 @@ int main(int argc, char** argv) {
     int height = image1.size().height;
     int width = image1.size().width;
     const int block_size = (height / width) * 2;
-
+    cv::Mat NaiveDifference = cv::Mat::zeros(height, width, CV_8UC1);
+    cv::Mat DPDifference = cv::Mat::zeros(height, width, CV_8UC1);
+    cv::Mat SBMDifference = cv::Mat::zeros(height, width, CV_8UC1);
 
     //naive Sterio reconstruction
    cv::Mat naive_disparities = cv::Mat::zeros(height, width, CV_8UC1);
    //disparity map
    StereoEstimation_Naive(window_size, dmin, height, width,image1, image2,naive_disparities, scale);
    //converting the disparity map tp 3D file
-   Disparity2PointCloud(coloredImage, "output-naive 3D File", 0, 0, naive_disparities, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.03);
+   Disparity2PointCloud(coloredImage, "output-naive 3D File", 0, 0, naive_disparities, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.13);
    //writing the png file of the disparity map
    std::stringstream out1;
    out1 << output_file << "naive-disparity.png";
    cv::imwrite(out1.str(), naive_disparities);
+   difference(naive_disparities, groundTruth, NaiveDifference);
+   cv::imwrite("NAIVE Difference.png", NaiveDifference);
    cout <<"Naive SSD dissimilarity : "<<diparityDissimilaritySSD(naive_disparities,groundTruth) << endl;
    
 
@@ -89,11 +96,13 @@ int main(int argc, char** argv) {
    cv::Mat dp_disparities = cv::Mat::zeros(height, width, CV_8UC1);
    //disparity map
    Dynamic(window_size, height, width, DPcoefficient, image1, image2, dp_disparities, 10.0);
-   Disparity2PointCloud(coloredImage, "output-dp 3D File", 0, 0, dp_disparities, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.1);
+   Disparity2PointCloud(coloredImage, "output-dp 3D File", 0, 0, dp_disparities, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.3);
    //writing the png file of the disparity map
    std::stringstream out2;
    out2 << output_file << "dp-disparity.png";
    cv::imwrite(out2.str(), dp_disparities);
+   difference(dp_disparities, groundTruth, DPDifference);
+   cv::imwrite("Dynamic programming Difference.png", DPDifference);
    cout << "DP SSD dissimilarity : " << diparityDissimilaritySSD(dp_disparities, groundTruth) << endl;
    
 
@@ -109,18 +118,21 @@ int main(int argc, char** argv) {
    std::cout << "Calculating disparities for the SBM ... Done.\r" << std::flush;
    std::cout << std::endl;
 
-   Disparity2PointCloud(coloredImage, "output-SBM 3D File", 0, 0, SBM, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.1);
+   Disparity2PointCloud(coloredImage, "output-SBM 3D File", 0, 0, SBM, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.3);
    //writing the png file of the disparity map
    std::stringstream out3;
    out3 << output_file << "SBM-disparity.png";
    cv::imwrite(out3.str(), SBM);
+   difference(SBM, groundTruth, SBMDifference);
+   cv::imwrite("SBM Difference.png", SBMDifference);
+
    cout << "SBM SSD dissimilarity : " << diparityDissimilaritySSD(SBM, groundTruth) << endl;
    //cout << "PSNR value for SBM approach is : " << getPSNR(groundTruth, SBM) << endl;
  
    //creating the pointcloud with the ground truth disparity
 
 
-   Disparity2PointCloud(coloredImage, "output-Ground truth 3D File", 0, 0, groundTruth, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.1);
+   Disparity2PointCloud(coloredImage, "output-Ground truth 3D File", 0, 0, groundTruth, 5, dmin, baseline, focal_length, 1.0, 1.0, 0.3);
    //writing the png file of the disparity map
 
 
@@ -387,3 +399,15 @@ double diparityDissimilaritySSD(
 }
 
 
+void difference(cv::Mat& image1, cv::Mat& image2, cv::Mat& output) {
+    int h = image1.size().height;
+    int w = image1.size().width;
+
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++) {
+            output.at<uchar>(i, j) = abs(image1.at<uchar>(i, j) - image2.at<uchar>(i, j));
+        }
+    }
+
+
+}
