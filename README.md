@@ -46,17 +46,32 @@ Naive approach Disparity map
 
 3D model generated with the ground truth disparity:
 
+![Midd1 GT](https://user-images.githubusercontent.com/72257286/147369050-64aca4a4-bdc4-4168-91c3-5cce40089bd4.png)
+
+![Moebius GT](https://user-images.githubusercontent.com/72257286/147369057-6c38477c-6384-4166-afa8-8fa1925bc53d.png)
+
 ![Aloe GT](https://user-images.githubusercontent.com/72257286/147368753-0c2afbb9-185e-4d9b-a60f-621e074eb8be.png)
 
 3D model generated withDynamic programming disparity:
 
+![Midd1 dp](https://user-images.githubusercontent.com/72257286/147369067-81b6d649-68f5-4680-b16a-700a968aaa77.png)
+
+![Moebius dp](https://user-images.githubusercontent.com/72257286/147369071-da1c561f-8738-4ead-9a59-b7dd9dfef2e7.png)
 
 ![Aloe dp](https://user-images.githubusercontent.com/72257286/147368757-93a2e3df-7dd7-49e8-9f6e-375b2c742e1d.png)
 
 3D model generated with the Naive approach disparity:
 
+![Midd1 Naive](https://user-images.githubusercontent.com/72257286/147369079-d6592bca-8aa7-489c-9f77-a3ada719b4f0.png)
+
+![Moebius Naive](https://user-images.githubusercontent.com/72257286/147369084-9875fb5e-7f76-4196-896c-0e1a3ee43c8a.png)
 
 ![Aloe naive](https://user-images.githubusercontent.com/72257286/147368761-cfdd239e-33c3-4124-9a78-0ed9af446e9b.png)
+
+
+3D model generated with SBM disparity:
+
+![Moebius SBM](https://user-images.githubusercontent.com/72257286/147369090-22b48d14-4e3c-41dc-b630-b57c96b2a4e0.png)
 
 
 Difference images:
@@ -64,6 +79,7 @@ Difference images:
 here are the difference images compaerd to ground truth:
 
 Naive:
+
 ![NAIVE Difference](https://user-images.githubusercontent.com/72257286/147368833-e40c8c28-6930-4fc7-9d8e-8ad314828600.png)
 
 
